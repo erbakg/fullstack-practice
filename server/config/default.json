@@ -1,0 +1,6 @@
+ {
+   "serverPort":5000,
+   "dbUrl":"mongodb+srv://erbakg:erbabaike98@cluster0.knyip.mongodb.net/cluster0?retryWrites=true&w=majority",
+   "secretKey":"mern-secret-key",
+   "filePath":"/Users/macbook/Desktop/Projects/Javascript/full-stack/server"
+ }
