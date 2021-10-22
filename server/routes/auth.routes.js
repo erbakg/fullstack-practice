@@ -55,6 +55,7 @@ router.post(
     try {
       const { email, password } = req.body;
       const user = await User.findOne({ email });
+      console.log('22222222', user);
       if (!user) {
         return res.status(404).json({ message: 'User was not found' });
       } else {
@@ -86,11 +87,12 @@ router.post(
 
 router.get('/auth', authMiddleware, async (req, res) => {
   try {
-    const user = await User.findOne({ id: req.user.id });
+    console.log('333333333', req.user.id);
+    const user = await User.findOne({ _id: req.user.id });
+    console.log('111111111', user);
     const token = jwt.sign({ id: user.id }, config.get('secretKey'), {
       expiresIn: '1h',
     });
-
     return res.json({
       token,
       user: {

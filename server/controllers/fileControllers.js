@@ -31,10 +31,41 @@ class FileController {
 
   async getFiles(req, res) {
     try {
-      const files = await File.find({
-        user: req.user.id,
-        parent: req.query.parent,
-      });
+      const { sort } = req.query;
+      let files = [];
+      switch (sort) {
+        case 'name':
+          files = await File.find({
+            user: req.user.id,
+            parent: req.query.parent,
+          }).sort({ name: 1 });
+
+          break;
+
+        case 'type':
+          files = await File.find({
+            user: req.user.id,
+            parent: req.query.parent,
+          }).sort({ type: 1 });
+
+          break;
+
+        case 'date':
+          files = await File.find({
+            user: req.user.id,
+            parent: req.query.parent,
+          }).sort({ date: 1 });
+
+          break;
+
+        default:
+          files = await File.find({
+            user: req.user.id,
+            parent: req.query.parent,
+          });
+          break;
+      }
+
       return res.json(files);
     } catch (error) {
       console.log('fetch files error', error);
@@ -131,8 +162,19 @@ class FileController {
         return res.json({ message: 'File was deleted' });
       }
     } catch (error) {
-      // console.log('ewqeqweeqw', error);
       return res.status(400).json({ message: 'Dir is not empty' });
+    }
+  }
+  async searchFiles(req, res) {
+    try {
+      const searchName = req.query.search;
+
+      const files = await File.find({ user: req.user.id });
+      files = files.filter((file) => file.name.includes(searchName));
+      return res.status(200).json({ files });
+    } catch (error) {
+      console.log('search error:', error);
+      return res.status(500).json({ message: 'Search server error' });
     }
   }
 }
